@@ -29,8 +29,8 @@
         "contestId": 0
       }
     ],
-    "last_access": "2017-05-05T03:29:19.340Z",
-    "token": "8qi3ohyvaqhtjgrdyciw4zxutwndkuam",
+    "last_access": "2017-05-05T20:20:23.485Z",
+    "token": "pVGQK88WVvcj9T47KDOV2KkKFYgNDVRG",
     "userPic": "https://avatars1.githubusercontent.com/u/2941328",
     "user_type": "normal"
   },
@@ -38,21 +38,13 @@
     "user": "string1",
     "pass": "string",
     "full_name": "string",
+    "userPic": "string",
     "email": "string",
     "score": 0,
-    "my_entries": [
-      {
-        "contestId": 1,
-        "videoId": "1Bix44C1EzY"
-      },
-      {
-        "contestId": 2,
-        "videoId": "1Bix44C1EzY"
-      }
-    ],
-    "id": 2,
-    "last_access": "2017-05-05T19:46:43.035Z",
-    "token": "t2deo6b0rhwdisd1fwtvlih4f9kjzsrn",
+    "my_entries": [],
+    "id": 4,
+    "last_access": "2017-05-05T20:23:37.713Z",
+    "token": "IkSKj2C3gfpOzsupf6rqTG4vJAZ6eURW",
     "user_type": "normal"
   }
 ]

@@ -20,8 +20,7 @@ var cronJob = cron.job("* * * * * *", function () {
 
     var seconds = new Date() / 1000;
 
-    if(seconds > paths.startTime + paths.duration)
-    {
+    if (seconds > paths.startTime + paths.duration) {
         var filesPath = [paths.contests_path];
 
         async.map(filesPath, function (filePath, cb) { //reading files or dir
@@ -31,7 +30,7 @@ var cronJob = cron.job("* * * * * *", function () {
             var contests = JSON.parse(results[0]);
             var current_contest = contests[contests.length - 1];
 
-            if (current_contest.songs.length>0) {
+            if (current_contest.songs.length > 0) {
 
                 console.log("cronner: contest finished");
 
@@ -48,8 +47,6 @@ var cronJob = cron.job("* * * * * *", function () {
                 console.log("cronner: chosen song -> " + current_contest.songs[topScorer].videoId);
 
 
-
-
                 contests.push({
                     id: current_contest.id + 1,
                     songs: []
@@ -64,7 +61,7 @@ var cronJob = cron.job("* * * * * *", function () {
                 opn(base_url + current_contest.songs[topScorer].videoId);
 
                 paths.startTime = new Date() / 1000;
-                paths.duration = current_contest.songs[topScorer].duration+5;
+                paths.duration = current_contest.songs[topScorer].duration + 5;
 
             }
 
