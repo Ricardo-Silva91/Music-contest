@@ -20,53 +20,58 @@ var cronJob = cron.job("* * * * * *", function () {
 
     var seconds = new Date() / 1000;
 
-    var filesPath = [paths.contests_path];
+    if(seconds > paths.startTime + paths.duration)
+    {
+        var filesPath = [paths.contests_path];
 
-    async.map(filesPath, function (filePath, cb) { //reading files or dir
-        fs.readFile(filePath, 'utf8', cb);
-    }, function (err, results) {
+        async.map(filesPath, function (filePath, cb) { //reading files or dir
+            fs.readFile(filePath, 'utf8', cb);
+        }, function (err, results) {
 
-        var contests = JSON.parse(results[0]);
-        var current_contest = contests[contests.length - 1];
+            var contests = JSON.parse(results[0]);
+            var current_contest = contests[contests.length - 1];
 
-        if (current_contest.songs.length>0 && seconds > paths.startTime + paths.duration) {
+            if (current_contest.songs.length>0) {
 
-            console.log("cronner: contest finished");
+                console.log("cronner: contest finished");
 
-            var maxScore = 0;
-            var topScorer = 0;
+                var maxScore = 0;
+                var topScorer = 0;
 
-            for (var i = 0; i < current_contest.songs.length; i++) {
-                if (maxScore < current_contest.songs[i].score.length) {
-                    topScorer = i;
-                    maxScore = current_contest.songs[i].score.length;
+                for (var i = 0; i < current_contest.songs.length; i++) {
+                    if (maxScore < current_contest.songs[i].score.length) {
+                        topScorer = i;
+                        maxScore = current_contest.songs[i].score.length;
+                    }
                 }
+
+                console.log("cronner: chosen song -> " + current_contest.songs[topScorer].videoId);
+
+
+
+
+                contests.push({
+                    id: current_contest.id + 1,
+                    songs: []
+                });
+
+                fs.writeFile(paths.contests_path, JSON.stringify(contests), function (err) {
+                    if (err != null) {
+                        console.error(err)
+                    }
+                });
+
+                opn(base_url + current_contest.songs[topScorer].videoId);
+
+                paths.startTime = new Date() / 1000;
+                paths.duration = current_contest.songs[topScorer].duration+5;
+
             }
 
-            console.log("cronner: chosen song -> " + current_contest.songs[topScorer].videoId);
+        });
+    }
 
 
-
-
-            contests.push({
-                id: current_contest.id + 1,
-                songs: []
-            });
-
-            fs.writeFile(paths.contests_path, JSON.stringify(contests), function (err) {
-                if (err != null) {
-                    console.error(err)
-                }
-            });
-
-            opn(base_url + current_contest.songs[topScorer].videoId);
-
-            paths.startTime = new Date() / 1000;
-            paths.duration = current_contest.songs[topScorer].duration+5;
-
-        }
-
-    });
     // perform operation e.g. GET request http.get() etc.
     //console.info('cron job completed');
 });
