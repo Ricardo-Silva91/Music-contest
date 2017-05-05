@@ -1,0 +1,258 @@
+---
+swagger: "2.0"
+info:
+  description: "API for the music contest server"
+  version: "0.1.0"
+  title: "Music contest API"
+host: "localhost:8080"
+schemes:
+- "http"
+produces:
+- "application/json"
+paths:
+  /:
+    get:
+      tags:
+      - "public"
+      summary: "base call (justo to check)"
+      description: "Justo to check if server is awake\n"
+      operationId: "rootGET"
+      parameters: []
+      responses:
+        200:
+          description: "welcome string"
+          schema:
+            type: "string"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Public"
+  /getUserExists:
+    get:
+      tags:
+      - "public"
+      summary: "check username"
+      description: "check if username exists"
+      operationId: "userExistsGET"
+      parameters:
+      - name: "user"
+        in: "query"
+        description: "The username"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "the result"
+          schema:
+            $ref: "#/definitions/Ok_res"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Public"
+  /getCurrentContest:
+    get:
+      tags:
+      - "user"
+      summary: "get songs in current contest"
+      description: "get array of songs in current contest (along with score)\n"
+      operationId: "getCurrentContestGET"
+      parameters:
+      - name: "token"
+        in: "query"
+        description: "The user's token"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Json array with songs"
+          schema:
+            $ref: "#/definitions/Current_contest"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "User"
+  /register:
+    post:
+      tags:
+      - "user"
+      summary: "register"
+      description: "user sends initial info and registers."
+      operationId: "registerPOST"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "request."
+        required: false
+        schema:
+          $ref: "#/definitions/register_info"
+      responses:
+        200:
+          description: "result"
+          schema:
+            $ref: "#/definitions/login_res"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "User"
+  /login:
+    post:
+      tags:
+      - "user"
+      summary: "login"
+      description: "user sends credentials and gets token."
+      operationId: "loginPOST"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "request."
+        required: false
+        schema:
+          $ref: "#/definitions/login_info"
+      responses:
+        200:
+          description: "result"
+          schema:
+            $ref: "#/definitions/login_res"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "User"
+  /enterCandidate:
+    post:
+      tags:
+      - "user"
+      summary: "add new song to the current contest"
+      description: "add new song to the current contest (only requires videoId)\n"
+      operationId: "enterCandidatePOST"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: ""
+        description: "parameters for the entry."
+        required: true
+        schema:
+          $ref: "#/definitions/Candidate"
+      responses:
+        200:
+          description: "entry response"
+          schema:
+            $ref: "#/definitions/Ok_res"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "User"
+  /voteForCandidate:
+    post:
+      tags:
+      - "user"
+      summary: "vote for the song to play next"
+      description: "vote for the song you want to play next (only one vote per user)\n"
+      operationId: "voteForCandidatePOST"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: ""
+        description: "parameters for the vote."
+        required: true
+        schema:
+          $ref: "#/definitions/candidateVote"
+      responses:
+        200:
+          description: "vote response"
+          schema:
+            $ref: "#/definitions/Ok_res"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "User"
+definitions:
+  login_info:
+    type: "object"
+    properties:
+      user:
+        type: "string"
+      pass:
+        type: "string"
+  login_res:
+    type: "object"
+    properties:
+      token:
+        type: "string"
+      user_type:
+        type: "string"
+      result:
+        type: "string"
+  register_info:
+    type: "object"
+    properties:
+      user:
+        type: "string"
+      pass:
+        type: "string"
+      full_name:
+        type: "string"
+      favorite_ice_cream:
+        type: "string"
+      email:
+        type: "string"
+  Ok_res:
+    type: "object"
+    properties:
+      result:
+        type: "string"
+  Error:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      message:
+        type: "string"
+      fields:
+        type: "string"
+      result:
+        type: "string"
+  Song:
+    type: "object"
+    properties:
+      song name:
+        type: "string"
+      thumbnail:
+        type: "string"
+      url:
+        type: "string"
+      score:
+        type: "integer"
+        format: "int32"
+  Current_contest:
+    type: "array"
+    items:
+      $ref: "#/definitions/Song"
+  Candidate:
+    type: "object"
+    properties:
+      token:
+        type: "string"
+      videoId:
+        type: "string"
+  candidateVote:
+    type: "object"
+    properties:
+      token:
+        type: "string"
+      songIndex:
+        type: "integer"
+        format: "int32"
