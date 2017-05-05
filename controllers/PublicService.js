@@ -3,12 +3,12 @@
 exports.rootGET = function(args, res, next) {
   /**
    * base call (justo to check)
-   * Justo to check if server is awake 
+   * Justo to check if server is awake
    *
    * returns String
    **/
   var examples = {};
-  examples['application/json'] = "aeiou";
+  examples['application/json'] = "Music contest says: Good evening...";
   if (Object.keys(examples).length > 0) {
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));

@@ -1,0 +1,27 @@
+[
+  {
+    "user": "abc",
+    "pass": "jogos",
+    "full_name": "RoflDoctor",
+    "email": "after@shave.com",
+    "score": 0,
+    "id": 0,
+    "last_access": "2017-05-05T03:08:05.644Z",
+    "token": "uPkTSWpArABJHII9SlzuDsHz0VqZplYf",
+    "user_type": "normal",
+    "finished_quizzes": []
+  },
+  {
+    "user": "string",
+    "pass": "string",
+    "full_name": "string",
+    "favorite_ice_cream": "string",
+    "email": "string",
+    "score": 0,
+    "id": 1,
+    "finished_quizzes": [],
+    "last_access": "2017-03-11T23:11:24.402Z",
+    "token": "T3h0qU9dG9e0PoFAvR2Z5GCS1ZGsfgeO",
+    "user_type": "normal"
+  }
+]
