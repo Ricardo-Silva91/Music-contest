@@ -12,6 +12,10 @@ module.exports.getCurrentContestGET = function getCurrentContestGET (req, res, n
   User.getCurrentContestGET(req.swagger.params, res, next);
 };
 
+module.exports.getUsersDataBriefGET = function getUsersDataBriefGET (req, res, next) {
+  User.getUsersDataBriefGET(req.swagger.params, res, next);
+};
+
 module.exports.loginPOST = function loginPOST (req, res, next) {
   User.loginPOST(req.swagger.params, res, next);
 };

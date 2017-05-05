@@ -75,6 +75,29 @@ paths:
           schema:
             $ref: "#/definitions/Error"
       x-swagger-router-controller: "User"
+  /getUsersDataBrief:
+    get:
+      tags:
+      - "user"
+      summary: "get name and pic of users"
+      description: "get array of brief user info (userName, pic & name)"
+      operationId: "getUsersDataBriefGET"
+      parameters:
+      - name: "token"
+        in: "query"
+        description: "The user's token"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Json array with songs"
+          schema:
+            $ref: "#/definitions/UsersBrief"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "User"
   /register:
     post:
       tags:
@@ -205,7 +228,7 @@ definitions:
         type: "string"
       full_name:
         type: "string"
-      favorite_ice_cream:
+      userPic:
         type: "string"
       email:
         type: "string"
@@ -242,6 +265,22 @@ definitions:
     type: "array"
     items:
       $ref: "#/definitions/Song"
+  UserBrief:
+    type: "object"
+    properties:
+      userId:
+        type: "integer"
+        format: "int32"
+      userPic:
+        type: "string"
+      user:
+        type: "string"
+      full_name:
+        type: "string"
+  UsersBrief:
+    type: "array"
+    items:
+      $ref: "#/definitions/UserBrief"
   Candidate:
     type: "object"
     properties:

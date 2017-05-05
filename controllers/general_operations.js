@@ -275,11 +275,11 @@ exports.addUser = function (users, username, password, full_name, favorite_ice_c
         user: username,
         pass: password,
         full_name: full_name,
-        favorite_ice_cream: favorite_ice_cream,
+        userPic: favorite_ice_cream,
         email: email,
         score: 0,
-        id: id,
-        finished_quizzes: []
+        my_entries: [],
+        id: id
     };
 
     users.push(newUser);

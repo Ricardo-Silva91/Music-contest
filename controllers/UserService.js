@@ -210,6 +210,72 @@ exports.getCurrentContestGET = function (args, res, next) {
     }
 }
 
+exports.getUsersDataBriefGET = function (args, res, next) {
+    /**
+     * get songs in current contest
+     * get array of songs in current contest (along with score)
+     *
+     * token String The user's token
+     * returns Current_contest
+     **/
+    var examples = {};
+    examples['application/json'] = "";
+    if (Object.keys(examples).length > 0) {
+
+
+        console.log('getUsersDataBriefGET: entered');
+
+        var token = args.token.value;
+
+        var filesPath = [paths.users_path, paths.contests_path];
+
+
+        async.map(filesPath, function (filePath, cb) { //reading files or dir
+            fs.readFile(filePath, 'utf8', cb);
+        }, function (err, results) {
+
+            var users = JSON.parse(results[0]);
+
+            var userPos = general_operations.findSomethingBySomething(users, "token", token);
+
+            if (userPos != -1) {
+
+                var usersBrief = [];
+
+                for(var i=0; i<users.length; i++)
+                {
+                    usersBrief.push(
+                        {
+                            userId: users[i].id,
+                            userPic: users[i].userPic,
+                            user: users[i].user,
+                            full_name: users[i].full_name
+                        }
+                    );
+                }
+
+                examples = usersBrief;
+
+            }
+            else {
+                examples = {
+                    result: "fail",
+                    code: 1,
+                    message: "user not found",
+                    fields: "token"
+                }
+            }
+
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify(examples, null, 2));
+
+        });
+
+    } else {
+        res.end();
+    }
+}
+
 exports.loginPOST = function (args, res, next) {
     /**
      * login
@@ -313,7 +379,7 @@ exports.registerPOST = function (args, res, next) {
         var username = args.body.value.user;
         var password = args.body.value.pass;
         var full_name = args.body.value.full_name;
-        var favorite_ice_cream = args.body.value.favorite_ice_cream;
+        var favorite_ice_cream = args.body.value.userPic;
         var email = args.body.value.email;
 
         var filesPath = [paths.users_path, paths.local_variables_path];
