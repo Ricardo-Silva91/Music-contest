@@ -1,36 +1,35 @@
 [
   {
-    "id":0,
-    "songs":
-            [
-              {
-                "id":0,
-                "videoId": "q6EoRBvdVPQ",
-                "score":0,
-                "thumbnailUrl": "https://i.ytimg.com/vi/q6EoRBvdVPQ/hqdefault.jpg",
-                "duration": 10
-              },
-              {
-                "id":1,
-                "videoId": "q6EoRBvdVPQ",
-                "score":0,
-                "thumbnailUrl": "https://i.ytimg.com/vi/q6EoRBvdVPQ/hqdefault.jpg",
-                "duration": 10
-              },
-              {
-                "id":2,
-                "videoId": "q6EoRBvdVPQ",
-                "score":0,
-                "thumbnailUrl": "https://i.ytimg.com/vi/q6EoRBvdVPQ/hqdefault.jpg",
-                "duration": 10
-              },
-              {
-                "id":3,
-                "videoId": "q6EoRBvdVPQ",
-                "score":0,
-                "thumbnailUrl": "https://i.ytimg.com/vi/q6EoRBvdVPQ/hqdefault.jpg",
-                "duration": 10
-              }
-            ]
+    "id": 0,
+    "songs": [
+      {
+        "id": 0,
+        "videoId": "q6eorbvdvpq",
+        "score": [],
+        "thumbnailUrl": "https://i.ytimg.com/vi/q6EoRBvdVPQ/hqdefault.jpg",
+        "duration": 10
+      },
+      {
+        "id": 1,
+        "videoId": "ifflcuhsz-u",
+        "score": [],
+        "thumbnailUrl": "https://i.ytimg.com/vi/IFfLCuHSZ-U/maxresdefault.jpg",
+        "duration": 81
+      },
+      {
+        "id": 2,
+        "videoId": "8YWl7tDGUPA",
+        "score": [
+          {
+            "userId": 1
+          },
+          {
+            "userId": 0
+          }
+        ],
+        "thumbnailUrl": "https://i.ytimg.com/vi/8YWl7tDGUPA/hqdefault.jpg",
+        "duration": 17
+      }
+    ]
   }
 ]

@@ -4,6 +4,8 @@ var fs = require("fs");
 var async = require("async");
 var randomstring = require("randomstring");
 
+const fetchVideoInfo = require('youtube-info');
+
 var paths = require('./../paths');
 var general_operations = require('./general_operations');
 
@@ -19,9 +21,135 @@ exports.enterCandidatePOST = function (args, res, next) {
     examples['application/json'] = {
         "result": "aeiou"
     };
+
+    console.log('enterCandidatePOST: entered');
+
+
     if (Object.keys(examples).length > 0) {
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
+
+
+        var token = args[""].value.token;
+        var newVideoId = args[""].value.videoId;
+        var filesPath = [paths.users_path, paths.contests_path];
+
+        async.map(filesPath, function (filePath, cb) { //reading files or dir
+            fs.readFile(filePath, 'utf8', cb);
+        }, function (err, results) {
+
+            var users = JSON.parse(results[0]);
+            var contests = JSON.parse(results[1]);
+
+            var userPos = general_operations.findSomethingBySomething(users, "token", token);
+
+            if (userPos != -1) {
+
+                var current_contest = contests[contests.length - 1];
+
+                var alreadySubmited = general_operations.findSomethingBySomething(users[userPos].my_entries, "contestId", current_contest.id);
+
+                if (alreadySubmited == -1) {
+                    var videoPos = general_operations.findSomethingBySomething(current_contest.songs, "videoId", newVideoId);
+
+                    if (videoPos == -1) {
+                        fetchVideoInfo(newVideoId, function (err, videoInfo) {
+                            if (err) throw new Error(err);
+
+                            if (videoInfo.url != undefined) {
+                                current_contest.songs.push(
+                                    {
+                                        id: current_contest.songs.length,
+                                        videoId: newVideoId,
+                                        score: [],
+                                        thumbnailUrl: videoInfo.thumbnailUrl,
+                                        duration: videoInfo.duration,
+                                        owner: users[userPos].full_name
+                                    }
+                                );
+                                contests[contests.length - 1] = current_contest;
+
+                                fs.writeFile(paths.contests_path, JSON.stringify(contests), function (err) {
+                                    if (err != null) {
+                                        console.error(err)
+                                    }
+                                });
+
+                                users[userPos].my_entries.push(
+                                    {
+                                        contestId: current_contest.id,
+                                        videoId: newVideoId
+                                    }
+                                );
+
+                                fs.writeFile(paths.users_path, JSON.stringify(users), function (err) {
+                                    if (err != null) {
+                                        console.error(err)
+                                    }
+                                });
+
+                                examples = {
+                                    result: 'success'
+                                };
+
+                                res.setHeader('Content-Type', 'application/json');
+                                res.end(JSON.stringify(examples, null, 2));
+                            }
+                            else {
+
+                                console.log('enterCandidatePOST: bad videoId');
+
+                                examples = {
+                                    result: "fail",
+                                    code: 1,
+                                    message: "videoId not valid",
+                                    fields: "videoId"
+                                }
+
+                                res.setHeader('Content-Type', 'application/json');
+                                res.end(JSON.stringify(examples, null, 2));
+                            }
+                        });
+                    }
+                    else {
+                        examples = {
+                            result: "fail",
+                            code: 1,
+                            message: "video already in contest",
+                            fields: "videoId"
+                        };
+
+                        res.setHeader('Content-Type', 'application/json');
+                        res.end(JSON.stringify(examples, null, 2));
+                    }
+                }
+                else {
+                    examples = {
+                        result: "fail",
+                        code: 1,
+                        message: "user already submitted for this contest",
+                        fields: "token"
+                    };
+
+                    res.setHeader('Content-Type', 'application/json');
+                    res.end(JSON.stringify(examples, null, 2));
+                }
+
+
+            }
+            else {
+                examples = {
+                    result: "fail",
+                    code: 0,
+                    message: "user not found",
+                    fields: "token"
+                };
+
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify(examples, null, 2));
+            }
+
+
+        });
+
     } else {
         res.end();
     }
@@ -38,8 +166,45 @@ exports.getCurrentContestGET = function (args, res, next) {
     var examples = {};
     examples['application/json'] = "";
     if (Object.keys(examples).length > 0) {
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
+
+
+        console.log('getCurrentContestGET: entered');
+
+        var token = args.token.value;
+
+        var filesPath = [paths.users_path, paths.contests_path];
+
+
+        async.map(filesPath, function (filePath, cb) { //reading files or dir
+            fs.readFile(filePath, 'utf8', cb);
+        }, function (err, results) {
+
+            var users = JSON.parse(results[0]);
+            var contests = JSON.parse(results[1]);
+
+            var userPos = general_operations.findSomethingBySomething(users, "token", token);
+
+            if (userPos != -1) {
+
+                var current_contest = contests[contests.length - 1];
+
+                examples = current_contest;
+
+            }
+            else {
+                examples = {
+                    result: "fail",
+                    code: 1,
+                    message: "user not found",
+                    fields: "token"
+                }
+            }
+
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify(examples, null, 2));
+
+        });
+
     } else {
         res.end();
     }
@@ -221,9 +386,84 @@ exports.voteForCandidatePOST = function (args, res, next) {
     examples['application/json'] = {
         "result": "aeiou"
     };
+
+    console.log('enterCandidatePOST: entered');
+
     if (Object.keys(examples).length > 0) {
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
+
+        var token = args[""].value.token;
+        var songIndex = args[""].value.songIndex;
+        var filesPath = [paths.users_path, paths.contests_path];
+
+        async.map(filesPath, function (filePath, cb) { //reading files or dir
+            fs.readFile(filePath, 'utf8', cb);
+        }, function (err, results) {
+
+            var users = JSON.parse(results[0]);
+            var contests = JSON.parse(results[1]);
+
+            var userPos = general_operations.findSomethingBySomething(users, "token", token);
+
+            if (userPos != -1) {
+
+                var current_contest = contests[contests.length - 1];
+
+                var songPos = general_operations.findSomethingBySomething(current_contest.songs, "id", songIndex);
+
+                if (songPos != -1) {
+
+                    for (var i = 0; i < current_contest.songs.length; i++) {
+                        for (var j = 0; j < current_contest.songs[i].score.length; j++) {
+                            if (current_contest.songs[i].score[j].userId == users[userPos].id) {
+                                current_contest.songs[i].score.splice(j, 1);
+                            }
+                        }
+                    }
+
+                    current_contest.songs[songPos].score.push(
+                        {
+                            userId: users[userPos].id
+                        }
+                    );
+
+                    contests[contests.length - 1] = current_contest;
+
+                    fs.writeFile(paths.contests_path, JSON.stringify(contests), function (err) {
+                        if (err != null) {
+                            console.error(err)
+                        }
+                    });
+
+                    examples = {
+                        result: "success"
+                    };
+
+                }
+                else {
+                    examples = {
+                        result: "fail",
+                        code: 1,
+                        message: "song index not in contest",
+                        fields: "songIndex"
+                    };
+
+                }
+            }
+            else {
+                examples = {
+                    result: "fail",
+                    code: 0,
+                    message: "user not found",
+                    fields: "token"
+                };
+
+            }
+
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify(examples, null, 2));
+
+        });
+
     } else {
         res.end();
     }

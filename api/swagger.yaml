@@ -5,6 +5,7 @@ info:
   version: "0.1.0"
   title: "Music contest API"
 host: "localhost:8080"
+#host: "192.168.1.78:8080"
 schemes:
 - "http"
 produces:

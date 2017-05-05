@@ -6,10 +6,14 @@
     "email": "after@shave.com",
     "score": 0,
     "id": 0,
-    "last_access": "2017-05-05T03:08:05.644Z",
-    "token": "uPkTSWpArABJHII9SlzuDsHz0VqZplYf",
+    "last_access": "2017-05-05T04:56:19.086Z",
+    "token": "6nci5zeqbw8u7xnifry7d4cxukb2zzqd",
     "user_type": "normal",
-    "finished_quizzes": []
+    "my_entries": [
+      {
+        "contestId": 0
+      }
+    ]
   },
   {
     "user": "string",
@@ -19,9 +23,13 @@
     "email": "string",
     "score": 0,
     "id": 1,
-    "finished_quizzes": [],
-    "last_access": "2017-03-11T23:11:24.402Z",
-    "token": "T3h0qU9dG9e0PoFAvR2Z5GCS1ZGsfgeO",
+    "my_entries": [
+      {
+        "contestId": 0
+      }
+    ],
+    "last_access": "2017-05-05T03:29:19.340Z",
+    "token": "8qi3ohyvaqhtjgrdyciw4zxutwndkuam",
     "user_type": "normal"
   }
 ]
