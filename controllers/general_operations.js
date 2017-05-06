@@ -210,8 +210,7 @@ exports.findSomethingBySomething = function (list, something, toFind) {
         //console.log('private getUserPosByToken: checking user ' + users[i].username);
         //console.log('private getUserPosByToken: user ' + users[i].username + ' token ' + users[i].current_token);
 
-        if((typeof toFind) == "string")
-        {
+        if ((typeof toFind) == "string") {
             //console.log('private findSomethingBySomething: it\'s a string.');
             toFind = toFind.toLowerCase();
             list[i][something] = list[i][something].toLowerCase();
@@ -257,8 +256,7 @@ exports.getLeaderBoard = function (users) {
 
     var newUsers = [];
 
-    for (var i=0; i<users.length && i<10; i++)
-    {
+    for (var i = 0; i < users.length && i < 10; i++) {
         newUsers.push({
             user: users[i].user,
             score: users[i].score
@@ -292,8 +290,7 @@ exports.briefQuizzes = function (quizzes) {
 
     var briefQuizzes = [];
 
-    for (var quiz in quizzes)
-    {
+    for (var quiz in quizzes) {
         briefQuizzes.push({
             id: 0,
             name: "test quizz",
@@ -309,10 +306,8 @@ exports.countOcs = function (list, element, oc) {
 
     var numberOfOcs = 0;
 
-    for(var i in list)
-    {
-        if(i[element] == oc)
-        {
+    for (var i in list) {
+        if (i[element] == oc) {
             numberOfOcs++;
         }
     }
@@ -325,10 +320,8 @@ exports.countOcsInStringArray = function (list, oc) {
 
     var numberOfOcs = 0;
 
-    for(var i in list)
-    {
-        if(list[i] == oc)
-        {
+    for (var i in list) {
+        if (list[i] == oc) {
             numberOfOcs++;
         }
     }

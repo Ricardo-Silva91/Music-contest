@@ -46,6 +46,7 @@ var cronJob = cron.job("* * * * * *", function () {
 
                 console.log("cronner: chosen song -> " + current_contest.songs[topScorer].videoId);
 
+                paths.last_winner = current_contest.songs[topScorer];
 
                 contests.push({
                     id: current_contest.id + 1,

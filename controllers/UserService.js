@@ -188,7 +188,14 @@ exports.getCurrentContestGET = function (args, res, next) {
 
                 var current_contest = contests[contests.length - 1];
 
-                examples = current_contest;
+                var seconds = new Date() / 1000;
+
+                examples =
+                {
+                    last_winner: paths.last_winner,
+                    time_remaining: ((paths.startTime + paths.duration) - seconds) > 0 ? ((paths.startTime + paths.duration) - seconds) : 0,
+                    contest: current_contest
+                }
 
             }
             else {
@@ -242,8 +249,7 @@ exports.getUsersDataBriefGET = function (args, res, next) {
 
                 var usersBrief = [];
 
-                for(var i=0; i<users.length; i++)
-                {
+                for (var i = 0; i < users.length; i++) {
                     usersBrief.push(
                         {
                             userId: users[i].id,

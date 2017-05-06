@@ -262,9 +262,17 @@ definitions:
         type: "integer"
         format: "int32"
   Current_contest:
-    type: "array"
-    items:
-      $ref: "#/definitions/Song"
+    type: "object"
+    properties:
+      last_winner:
+        $ref: "#/definitions/Song"
+      time_remaining:
+        type: "integer"
+        format: "int32"
+      contest:
+        type: "array"
+        items:
+          $ref: "#/definitions/Song"
   UserBrief:
     type: "object"
     properties:
