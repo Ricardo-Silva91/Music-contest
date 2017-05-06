@@ -261,11 +261,23 @@ definitions:
       score:
         type: "integer"
         format: "int32"
+  Contest_winner:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int32"
+      videoId:
+        type: "string"
+      title:
+        type: "string"
+      thumbnailUrl:
+        type: "string"
   Current_contest:
     type: "object"
     properties:
       last_winner:
-        $ref: "#/definitions/Song"
+        $ref: "#/definitions/Contest_winner"
       time_remaining:
         type: "integer"
         format: "int32"

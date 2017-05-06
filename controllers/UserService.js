@@ -62,7 +62,8 @@ exports.enterCandidatePOST = function (args, res, next) {
                                         score: [],
                                         thumbnailUrl: videoInfo.thumbnailUrl,
                                         duration: videoInfo.duration,
-                                        owner: users[userPos].full_name
+                                        owner: users[userPos].full_name,
+                                        title: videoInfo.title
                                     }
                                 );
                                 contests[contests.length - 1] = current_contest;
