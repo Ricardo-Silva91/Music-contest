@@ -153,10 +153,6 @@ paths:
       summary: "add new song to the current contest"
       description: "add new song to the current contest (only requires videoId)\n"
       operationId: "enterCandidatePOST"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
       parameters:
       - in: "body"
         name: ""
@@ -181,15 +177,11 @@ paths:
       summary: "vote for the song to play next"
       description: "vote for the song you want to play next (only one vote per user)\n"
       operationId: "voteForCandidatePOST"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
       parameters:
       - in: "body"
         name: ""
         description: "parameters for the vote."
-        required: true
+        required: false
         schema:
           $ref: "#/definitions/candidateVote"
       responses:
@@ -314,5 +306,4 @@ definitions:
       token:
         type: "string"
       songIndex:
-        type: "integer"
-        format: "int32"
+        type: "string"
