@@ -541,4 +541,3 @@ exports.voteForCandidatePOST = function (args, res, next) {
         res.end();
     }
 }
-
