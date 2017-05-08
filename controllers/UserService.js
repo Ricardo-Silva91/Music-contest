@@ -23,6 +23,7 @@ exports.enterCandidatePOST = function (args, res, next) {
     };
 
     console.log('enterCandidatePOST: entered');
+        console.log('enterCandidatePOST: ' + JSON.stringify(args));
 
 
     if (Object.keys(examples).length > 0) {
@@ -62,7 +63,7 @@ exports.enterCandidatePOST = function (args, res, next) {
                                         score: [],
                                         thumbnailUrl: videoInfo.thumbnailUrl,
                                         duration: videoInfo.duration,
-                                        owner: users[userPos].full_name,
+                                        owner: users[userPos].user,
                                         title: videoInfo.title
                                     }
                                 );
@@ -256,9 +257,10 @@ exports.getUsersDataBriefGET = function (args, res, next) {
                             userId: users[i].id,
                             userPic: users[i].userPic,
                             user: users[i].user,
-                            full_name: users[i].full_name
+                            full_name: users[i].full_name,
+                            me: i==userPos ? true:false
                         }
-                    );
+                    )
                 }
 
                 examples = usersBrief;
@@ -461,11 +463,12 @@ exports.voteForCandidatePOST = function (args, res, next) {
     };
 
     console.log('enterCandidatePOST: entered');
+    //console.log('enterCandidatePOST: body: ' + JSON.stringify(args));
 
     if (Object.keys(examples).length > 0) {
 
         var token = args[""].value.token;
-        var songIndex = args[""].value.songIndex;
+        var songIndex = parseInt(args[""].value.songIndex);
         var filesPath = [paths.users_path, paths.contests_path];
 
         async.map(filesPath, function (filePath, cb) { //reading files or dir
