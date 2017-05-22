@@ -27,3 +27,7 @@ module.exports.registerPOST = function registerPOST (req, res, next) {
 module.exports.voteForCandidatePOST = function voteForCandidatePOST (req, res, next) {
   User.voteForCandidatePOST(req.swagger.params, res, next);
 };
+
+module.exports.skipTurnPOST = function skipTurnPOST (req, res, next) {
+  User.skipTurnPOST(req.swagger.params, res, next);
+};

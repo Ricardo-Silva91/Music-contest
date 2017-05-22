@@ -23,7 +23,7 @@ exports.enterCandidatePOST = function (args, res, next) {
     };
 
     console.log('enterCandidatePOST: entered');
-        console.log('enterCandidatePOST: ' + JSON.stringify(args));
+    console.log('enterCandidatePOST: ' + JSON.stringify(args));
 
 
     if (Object.keys(examples).length > 0) {
@@ -59,7 +59,7 @@ exports.enterCandidatePOST = function (args, res, next) {
                                 current_contest.songs.push(
                                     {
                                         id: current_contest.songs.length,
-                                        videoId: newVideoId,
+                                        videoId: videoInfo.videoId,
                                         score: [],
                                         thumbnailUrl: videoInfo.thumbnailUrl,
                                         duration: videoInfo.duration,
@@ -258,7 +258,7 @@ exports.getUsersDataBriefGET = function (args, res, next) {
                             userPic: users[i].userPic,
                             user: users[i].user,
                             full_name: users[i].full_name,
-                            me: i==userPos ? true:false
+                            me: i == userPos ? true : false
                         }
                     )
                 }
@@ -530,6 +530,63 @@ exports.voteForCandidatePOST = function (args, res, next) {
                     result: "fail",
                     code: 0,
                     message: "user not found",
+                    fields: "token"
+                };
+
+            }
+
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify(examples, null, 2));
+
+        });
+
+    } else {
+        res.end();
+    }
+}
+
+exports.skipTurnPOST = function (args, res, next) {
+    /**
+     * vote for the song to play next
+     * vote for the song you want to play next (only one vote per user)
+     *
+     *  CandidateVote parameters for the vote.
+     * returns Ok_res
+     **/
+    var examples = {};
+    examples['application/json'] = {
+        "result": "aeiou"
+    };
+
+    console.log('skipTurnPOST: entered');
+    //console.log('enterCandidatePOST: body: ' + JSON.stringify(args));
+
+    if (Object.keys(examples).length > 0) {
+
+        var token = args[""].value.token;
+        var filesPath = [paths.users_path];
+
+        async.map(filesPath, function (filePath, cb) { //reading files or dir
+            fs.readFile(filePath, 'utf8', cb);
+        }, function (err, results) {
+
+            var users = JSON.parse(results[0]);
+
+            var userPos = general_operations.findSomethingBySomething(users, "token", token);
+
+            if (userPos != -1 && users[userPos].user_type == 'admin') {
+
+                paths.skipTurn = true;
+
+                examples = {
+                    result: "sucess"
+                };
+            }
+            else {
+                examples = {
+                    result: "fail",
+                    code: 0,
+                    message: "user not found or not admin",
                     fields: "token"
                 };
 

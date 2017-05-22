@@ -194,6 +194,30 @@ paths:
           schema:
             $ref: "#/definitions/Error"
       x-swagger-router-controller: "User"
+  /skipTurn:
+    post:
+      tags:
+      - "user"
+      summary: "admin skips current winner"
+      description: "admins can skip the current playing song and end the on-going contest"
+      operationId: "skipTurnPOST"
+      parameters:
+      - in: "body"
+        name: ""
+        description: "parameters for the vote."
+        required: false
+        schema:
+          $ref: "#/definitions/justTheToken"
+      responses:
+        200:
+          description: "success response"
+          schema:
+            $ref: "#/definitions/Ok_res"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "User"
 definitions:
   login_info:
     type: "object"
@@ -306,4 +330,9 @@ definitions:
       token:
         type: "string"
       songIndex:
+        type: "string"
+  justTheToken:
+    type: "object"
+    properties:
+      token:
         type: "string"

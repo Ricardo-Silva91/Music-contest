@@ -12,6 +12,7 @@ var general_operations = require('./general_operations');
 var cron = require('cron');
 
 const opn = require('opn');
+const killTabs = require('kill-tabs');
 
 const base_url = 'https://www.youtube.com/watch?v=';
 
@@ -20,8 +21,14 @@ var cronJob = cron.job("* * * * * *", function () {
 
     var seconds = new Date() / 1000;
 
-    if (seconds > paths.startTime + paths.duration) {
+    if (seconds > paths.startTime + paths.duration || paths.skipTurn == true) {
         var filesPath = [paths.contests_path];
+
+        if (paths.skipTurn == true) {
+            killTabs();
+        }
+
+        paths.skipTurn = false;
 
         async.map(filesPath, function (filePath, cb) { //reading files or dir
             fs.readFile(filePath, 'utf8', cb);
