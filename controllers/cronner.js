@@ -60,7 +60,7 @@ var cronJob = cron.job("* * * * * *", function () {
                     songs: []
                 });
 
-                fs.writeFile(paths.contests_path, JSON.stringify(contests), function (err) {
+                fs.writeFile(paths.contests_path, JSON.stringify(contests, null,2), function (err) {
                     if (err != null) {
                         console.error(err)
                     }
@@ -82,9 +82,39 @@ var cronJob = cron.job("* * * * * *", function () {
 });
 
 
+const startRefresh = function () {
+
+    var filesPath = [paths.users_path];
+
+    async.map(filesPath, function (filePath, cb) { //reading files or dir
+        fs.readFile(filePath, 'utf8', cb);
+    }, function (err, results) {
+
+        var users = JSON.parse(results[0]);
+
+        for (var i =0; i<users.length; i++) {
+            users[i].token = undefined;
+            users[i].ip = undefined;
+        }
+
+        fs.writeFile(paths.users_path, JSON.stringify(users, null,2), function (err) {
+            if (err !== null) {
+                console.error(err)
+            }
+        });
+
+    });
+
+};
+
+
+
+
 //one of - running at start
 cronJob.start();
-//startRefresh();
+startRefresh();
+
+
 
 
 

@@ -5,6 +5,25 @@
 var request = require("request");
 
 
+exports.getUserPosByName = function (users, user) {
+    var result = -1;
+
+    for (var i = 0; i < users.length; i++) {
+
+        //console.log('private getUserPosByToken: checking user ' + users[i].username);
+        //console.log('private getUserPosByToken: user ' + users[i].username + ' token ' + users[i].current_token);
+
+        if (users[i].user == user) {
+            console.log('private getUserPosByName: user found.');
+            result = i;
+            break;
+        }
+    }
+    return result;
+
+};
+
+
 exports.getUserPosByToken = function (users, token) {
     var result = -1;
 
@@ -210,17 +229,19 @@ exports.findSomethingBySomething = function (list, something, toFind) {
         //console.log('private getUserPosByToken: checking user ' + users[i].username);
         //console.log('private getUserPosByToken: user ' + users[i].username + ' token ' + users[i].current_token);
 
-        if ((typeof toFind) == "string") {
-            //console.log('private findSomethingBySomething: it\'s a string.');
-            toFind = toFind.toLowerCase();
-            list[i][something] = list[i][something].toLowerCase();
-            //console.log('private findSomethingBySomething: comparing ' + toFind + ' ' + list[i][something] +'.')
-        }
+        if (list[i][something] !== undefined) {
+            if ((typeof toFind) == "string") {
+                //console.log('private findSomethingBySomething: it\'s a string.');
+                toFind = toFind.toLowerCase();
+                list[i][something] = list[i][something].toLowerCase();
+                //console.log('private findSomethingBySomething: comparing ' + toFind + ' ' + list[i][something] +'.')
+            }
 
-        if (list[i][something] == toFind) {
-            console.log('private findSomethingBySomething: found.');
-            result = i;
-            break;
+            if (list[i][something] == toFind) {
+                console.log('private findSomethingBySomething: found.');
+                result = i;
+                break;
+            }
         }
     }
     return result;

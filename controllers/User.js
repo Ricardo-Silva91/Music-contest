@@ -17,7 +17,7 @@ module.exports.getUsersDataBriefGET = function getUsersDataBriefGET (req, res, n
 };
 
 module.exports.loginPOST = function loginPOST (req, res, next) {
-  User.loginPOST(req.swagger.params, res, next);
+  User.loginPOST(req.swagger.params, res, next, req);
 };
 
 module.exports.registerPOST = function registerPOST (req, res, next) {

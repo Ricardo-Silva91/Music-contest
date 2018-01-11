@@ -69,7 +69,7 @@ exports.enterCandidatePOST = function (args, res, next) {
                                 );
                                 contests[contests.length - 1] = current_contest;
 
-                                fs.writeFile(paths.contests_path, JSON.stringify(contests), function (err) {
+                                fs.writeFile(paths.contests_path, JSON.stringify(contests, undefined, 2), function (err) {
                                     if (err != null) {
                                         console.error(err)
                                     }
@@ -82,7 +82,7 @@ exports.enterCandidatePOST = function (args, res, next) {
                                     }
                                 );
 
-                                fs.writeFile(paths.users_path, JSON.stringify(users), function (err) {
+                                fs.writeFile(paths.users_path, JSON.stringify(users, undefined, 2), function (err) {
                                     if (err != null) {
                                         console.error(err)
                                     }
@@ -194,6 +194,7 @@ exports.getCurrentContestGET = function (args, res, next) {
 
                 examples =
                 {
+                    result:'success',
                     last_winner: paths.last_winner,
                     time_remaining: ((paths.startTime + paths.duration) - seconds) > 0 ? ((paths.startTime + paths.duration) - seconds) : 0,
                     contest: current_contest
@@ -285,7 +286,7 @@ exports.getUsersDataBriefGET = function (args, res, next) {
     }
 }
 
-exports.loginPOST = function (args, res, next) {
+exports.loginPOST = function (args, res, next, req) {
     /**
      * login
      * user sends credentials and gets token.
@@ -303,6 +304,7 @@ exports.loginPOST = function (args, res, next) {
 
         console.log('loginPOST: entered');
 
+        var client_ip = req.headers['x-forwarded-for'];
         var username = args.body.value.user;
         var pass = args.body.value.pass;
 
@@ -315,12 +317,14 @@ exports.loginPOST = function (args, res, next) {
             var users = JSON.parse(results[0]);
 
             var userPos = general_operations.checkUserAndGetPosByCredentials(users, username, pass);
+            var ipPos = general_operations.findSomethingBySomething(users, 'ip', client_ip);
 
-            if (userPos > -1) {
+            if (userPos > -1 && (ipPos === -1 || ipPos === userPos)) {
                 users[userPos].last_access = new Date();
                 users[userPos].token = randomstring.generate();
+                users[userPos].ip = client_ip;
 
-                fs.writeFile(paths.users_path, JSON.stringify(users), function (err) {
+                fs.writeFile(paths.users_path, JSON.stringify(users, undefined, 2), function (err) {
                     if (err != null) {
                         console.error(err)
                     }
@@ -415,10 +419,10 @@ exports.registerPOST = function (args, res, next) {
                 //console.log('users:\n' + JSON.stringify(users));
                 //console.log('local:\n' + JSON.stringify(local_variables));
 
-                fs.writeFile(paths.users_path, JSON.stringify(users), function (err) {
+                fs.writeFile(paths.users_path, JSON.stringify(users, undefined, 2), function (err) {
                     console.error(err)
                 });
-                fs.writeFile(paths.local_variables_path, JSON.stringify(local_variables), function (err) {
+                fs.writeFile(paths.local_variables_path, JSON.stringify(local_variables, undefined, 2), function (err) {
                     console.error(err)
                 });
 
@@ -504,7 +508,7 @@ exports.voteForCandidatePOST = function (args, res, next) {
 
                     contests[contests.length - 1] = current_contest;
 
-                    fs.writeFile(paths.contests_path, JSON.stringify(contests), function (err) {
+                    fs.writeFile(paths.contests_path, JSON.stringify(contests, undefined, 2), function (err) {
                         if (err != null) {
                             console.error(err)
                         }
